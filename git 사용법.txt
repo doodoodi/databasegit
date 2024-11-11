@@ -1,0 +1,16 @@
+git init 주소 : /C/Users/user/Desktop/database/databasegit
+
+아이디 : doodoodi
+email : wnsqja0219@naver.com
+
+pwd : 현재 위치 알려줌
+cd : 원하는 곳으로 이동할 때 쓰는 명령어
+
+
+git init한 주소로 가서
+git add 파일명 으로 추가
+git commit -m "주석쓸 내용" 으로 커밋
+mkdir : 디렉토리 생성
+git push -u origin main : 로컬에서 변경사항을
+원격 저장소로 보냄
+git pull origin main : 원격 저장소에서 로컬로 가져옴
