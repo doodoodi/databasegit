@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>식사 관리</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .logo {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2a9d8f;
+        }
+        .title {
+            font-size: 24px;
+            color: #555;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+        .button {
+            padding: 20px 40px; /* 버튼 내부 공간을 키움 */
+            font-size: 24px; /* 글자 크기를 키움 */
+            font-weight: bold;
+            color: white;
+            background-color: #2a9d8f;
+            border: none;
+            border-radius: 10px; /* 모서리를 더 둥글게 */
+            cursor: pointer;
+            text-decoration: none; /* 링크 스타일 제거 */
+            min-width: 150px; /* 버튼의 최소 너비 설정 */
+            
+        }
+        .button:hover {
+            background-color: #238f7b;
+        }
+    </style>
+</head>
+<body>
+    <!-- 상단 로고 및 제목 -->
+    <div class="header">
+        <div class="logo">FINE</div>
+        <div class="title">식사 관리</div>
+    </div>
+
+    <!-- 메뉴 버튼 -->
+    <div class="buttons">
+        <a href="/breakfast" class="button">아침</a>
+        <a href="/lunch" class="button">점심</a>
+        <a href="/dinner" class="button">저녁</a>
+    </div>
+</body>
+</html>

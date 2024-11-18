@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아침 메뉴 관리</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2a9d8f;
+            cursor: pointer; /* 클릭 가능하도록 커서 변경 */
+            text-decoration: none; /* 링크 스타일 제거 */
+        }
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        .menu-item span {
+            font-size: 18px;
+            color: #333;
+        }
+        .button {
+            padding: 5px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            background-color: #2a9d8f;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #238f7b;
+        }
+        .search-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 로고 클릭 시 siksa.html로 이동 -->
+        <div class="header">
+            <a href="/siksa" class="logo">FINE</a>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="음식 이름을 입력하세요">
+            <button class="button">찾기</button>
+        </div>
+        <div class="menu-item">
+            <span>두부</span>
+            <button class="button">추가</button>
+        </div>
+        <div class="menu-item">
+            <span>닭가슴살</span>
+            <button class="button">추가</button>
+        </div>
+        <div class="menu-item">
+            <span>무김치</span>
+            <button class="button">추가</button>
+        </div>
+        <div class="menu-item">
+            <span>...</span>
+            <button class="button">추가</button>
+        </div>
+    </div>
+</body>
+</html>
