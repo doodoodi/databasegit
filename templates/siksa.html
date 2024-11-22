@@ -11,15 +11,23 @@
             color: #333;
             margin: 0;
             padding: 0;
+            display: flex; /* 화면 중앙 정렬을 위해 flexbox 사용 */
+            justify-content: center; /* 가로 중앙 정렬 */
+            align-items: center; /* 세로 중앙 정렬 */
+            height: 100vh; /* 화면 전체 높이 설정 */
+        }
+        .container {
+            text-align: center; /* 내부 텍스트와 버튼들을 가운데 정렬 */
         }
         .header {
-            text-align: center;
-            margin: 20px 0;
+            margin-bottom: 20px; /* 상단 여백 */
         }
         .logo {
             font-size: 48px;
             font-weight: bold;
             color: #2a9d8f;
+            cursor: pointer; /* 로고를 클릭 가능하도록 커서 변경 */
+            text-decoration: none; /* 링크 스타일 제거 */
         }
         .title {
             font-size: 24px;
@@ -29,20 +37,19 @@
             display: flex;
             justify-content: center;
             gap: 20px;
-            margin: 40px 0;
+            margin-top: 40px;
         }
         .button {
-            padding: 20px 40px; /* 버튼 내부 공간을 키움 */
-            font-size: 24px; /* 글자 크기를 키움 */
+            padding: 20px 40px; /* 버튼 내부 공간 */
+            font-size: 24px; /* 글자 크기 */
             font-weight: bold;
             color: white;
             background-color: #2a9d8f;
             border: none;
-            border-radius: 10px; /* 모서리를 더 둥글게 */
+            border-radius: 10px; /* 둥근 모서리 */
             cursor: pointer;
             text-decoration: none; /* 링크 스타일 제거 */
-            min-width: 150px; /* 버튼의 최소 너비 설정 */
-            
+            min-width: 150px; /* 최소 너비 */
         }
         .button:hover {
             background-color: #238f7b;
@@ -50,17 +57,19 @@
     </style>
 </head>
 <body>
-    <!-- 상단 로고 및 제목 -->
-    <div class="header">
-        <div class="logo">FINE</div>
-        <div class="title">식사 관리</div>
-    </div>
+    <div class="container">
+        <!-- 상단 로고 및 제목 -->
+        <div class="header">
+            <a href="/" class="logo">FINE</a> <!-- 로고를 클릭하면 food_web_startpage로 이동 -->
+            <div class="title">식사 관리</div>
+        </div>
 
-    <!-- 메뉴 버튼 -->
-    <div class="buttons">
-        <a href="/breakfast" class="button">아침</a>
-        <a href="/lunch" class="button">점심</a>
-        <a href="/dinner" class="button">저녁</a>
+        <!-- 메뉴 버튼 -->
+        <div class="buttons">
+            <a href="/breakfast" class="button">아침</a>
+            <a href="/lunch" class="button">점심</a>
+            <a href="/dinner" class="button">저녁</a>
+        </div>
     </div>
 </body>
 </html>

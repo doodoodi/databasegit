@@ -20,87 +20,112 @@
             padding: 20px;
         }
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
             margin-bottom: 20px;
         }
         .logo {
             font-size: 36px;
             font-weight: bold;
             color: #2a9d8f;
-            cursor: pointer; /* 클릭 가능하도록 커서 변경 */
-            text-decoration: none; /* 링크 스타일 제거 */
+            text-decoration: none;
         }
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-        .menu-item:last-child {
-            border-bottom: none;
-        }
-        .menu-item span {
-            font-size: 18px;
-            color: #333;
-        }
-        .button {
-            padding: 5px 10px;
-            font-size: 14px;
+        .error-message {
+            color: red;
+            margin: 10px 0;
             font-weight: bold;
-            color: white;
-            background-color: #2a9d8f;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #238f7b;
         }
         .search-bar {
             display: flex;
-            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
             margin-bottom: 20px;
         }
         .search-bar input {
-            width: 100%;
+            flex: 1;
             padding: 10px;
             font-size: 16px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            margin-right: 10px;
+        }
+        .search-bar button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #2a9d8f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-bar button:hover {
+            background-color: #238f7b;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table thead {
+            background-color: #2a9d8f;
+            color: white;
+        }
+        table th, table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 로고 클릭 시 siksa.html로 이동 -->
+        <!-- 로고 -->
         <div class="header">
             <a href="/siksa" class="logo">FINE</a>
         </div>
+
+        <!-- 검색 창 -->
         <div class="search-bar">
-            <input type="text" placeholder="음식 이름을 입력하세요">
-            <button class="button">찾기</button>
+            <form method="POST" action="">
+                <input type="text" name="keyword" placeholder="음식 이름을 입력하세요">
+                <button type="submit">찾기</button>
+            </form>
         </div>
-        <div class="menu-item">
-            <span>치킨 샐러드</span>
-            <button class="button">추가</button>
-        </div>
-        <div class="menu-item">
-            <span>밥</span>
-            <button class="button">추가</button>
-        </div>
-        <div class="menu-item">
-            <span>스프</span>
-            <button class="button">추가</button>
-        </div>
-        <div class="menu-item">
-            <span>...</span>
-            <button class="button">추가</button>
-        </div>
+
+        <!-- 에러 메시지 -->
+        {% if error_message %}
+        <div class="error-message">{{ error_message }}</div>
+        {% endif %}
+
+        <!-- 음식 리스트 테이블 -->
+        <table>
+            <thead>
+                <tr>
+                    <th>식품명</th>
+                    <th>식품코드</th>
+                    <th>칼로리</th>
+                    <th>탄수화물</th>
+                    <th>단백질</th>
+                    <th>지방</th>
+                    <th>콜레스테롤</th>
+                    <th>식이섬유</th>
+                    <th>나트륨</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in food_data %}
+                <tr>
+                    <td>{{ item[0] }}</td>
+                    <td>{{ item[1] }}</td>
+                    <td>{{ item[2] }}</td>
+                    <td>{{ item[3] }}</td>
+                    <td>{{ item[4] }}</td>
+                    <td>{{ item[5] }}</td>
+                    <td>{{ item[6] }}</td>
+                    <td>{{ item[7] }}</td>
+                    <td>{{ item[8] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </body>
 </html>
