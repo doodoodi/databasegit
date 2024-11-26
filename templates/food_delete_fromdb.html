@@ -31,19 +31,22 @@
             text-decoration: none; /* 링크에 밑줄 제거 */
         }
         .search-container {
-            display: flex; /* flex 방식 사용 */
+            display: block; /* block 방식 사용 */
             gap: 10px; /* 버튼 사이 간격 설정 */
             margin-bottom: 20px; /* 검색 박스랑 아래 여백 간격 */
             width: 100%; /* 검색 영역 너비 100% 설정 */
         }
         .search-input {
-            flex: 1; /* 검색박스랑 테이블 나란히 배치 */
+            width: calc(100% - 120px); /* 버튼 크기를 제외한 나머지 너비를 100%로 설정 */
             padding: 10px; /* 텍스트 안쪽 여백 설정 */
             border: 1px solid #ccc; /* 테두리 회색 */
             border-radius: 5px; /* 모서리 둥글게 */
             font-size: 16px; /* 글자 크기 */
+            box-sizing: border-box; /*  너비와 높이가 패딩과 테두리를 포함한 값으로 설정 */
+            display: inline-block; /* 한줄에 표시 */
         }
         .search-button {
+            width: 100px; /* 버튼의 고정된 너비 설정 */
             padding: 10px 20px; /* 버튼 내부 여백 설정 위, 아래 10px, 왼쪽, 오른쪽 20px */
             font-size: 16px; /* 글자 크기 */
             font-weight: bold; /* 글자 굵게 */
@@ -52,9 +55,17 @@
             border: none; /* 테두리 제거 */
             border-radius: 5px; /* 모서리 둥글게 */
             cursor: pointer; /* 버튼 위에 마우스를 올렸을 때 포인터 커서로 변경 */
+            box-sizing: border-box; /*  너비와 높이가 패딩과 테두리를 포함한 값으로 설정 */
+            display: inline-block; /* 한줄에 표시 */
+            margin-left: 15px; /* 버튼과 입력창 사이에 15px 간격 추가 */
         }
         .search-button:hover {
             background-color: #21867a; /* 검색에 마우스 갖다대면 살짝 어두운 청록색 */
+        }
+        .error-message {
+            color: red; /* 글자 빨강 */
+            margin: 10px 0; /* 여백 간격 설정 */
+            font-weight: bold; /* 글자 굵게 */
         }
         table {
             width: 100%; /* 너비 100% */
@@ -87,14 +98,21 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="title"><a href="www.naver.com">FINE</a></h1>
+        <h1 class="title"><a href="/">FINE</a></h1>
         <!-- 메인 타이틀에 링크 추가 -->
         <div class="search-container">
-            <input type="text" class="search-input" placeholder="음식명을 입력하세요">
-            <!-- 텍스트 박스 생성 및 글씨 띄우기 -->
-            <button class="search-button">검색</button>
-            <!-- 검색 버튼 생성 -->
-        </div>
+            <form method="POST" action="/food_delete_fromdb">
+                <!-- 서버로 전송 -->
+                <input type="text" class="search-input" name="keyword" placeholder="음식명을 입력하세요">
+               <!-- 텍스트 박스 생성 및 글씨 띄우기 -->
+                <button class="search-button" type="submit">검색</button>
+                <!-- 검색 버튼 생성 -->
+            </form>
+        </div>     
+        {% if error_message %}
+        <div class="error-message" style="color: red; text-align: center; margin-bottom: 20px;">{{ error_message }}</div>
+        {% endif %}
+        <!-- 검색에서 입력안하거나 없는 내용일 때 에러 메시지 띄우기 -->
         <table>
             <thead>
                 <tr>
@@ -111,34 +129,29 @@
                 </tr>
             </thead>
             <tbody>
+                {% for item in food_data %}
                 <tr>
-                    <!-- 데이터셀 내용 넣기 -->
-                    <td>두부</td>
-                    <td>50</td>
-                    <td>0.8</td>
-                    <td>5.6</td>
-                    <td>3.7</td>
-                    <td>0</td>
-                    <td>0.1</td>
-                    <td>5</td>
-                    <td><button class="delete-button" onclick="alert('두부가 삭제되었습니다.')">삭제</button></td>
-                    <!-- 삭제 버튼 생성 및 누를 시 문구 띄우기 -->
+                    <!-- 데이터셀 내용 -->
+                    <td>{{ item[0] }}</td>
+                    <td>{{ item[2] }}</td>
+                    <td>{{ item[3] }}</td>
+                    <td>{{ item[4] }}</td>
+                    <td>{{ item[5] }}</td>
+                    <td>{{ item[6] }}</td>
+                    <td>{{ item[7] }}</td>
+                    <td>{{ item[8] }}</td>
+                    <td>
+                        <form method="POST">
+                            <input type="hidden" name="food_name" value="{{ item[0] }}">
+                            <input type="hidden" name="food_code" value="{{ item[1] }}">
+                            <button class="delete-button" type="submit">삭제</button>
+                            <!-- 삭제 버튼 생성 및 누를 시 문구 띄우기 -->
+                        </form>
+                    </td>
                 </tr>
-                <tr>
-                    <!-- 데이터셀 내용 넣기 -->
-                    <td>두부조림</td>
-                    <td>89.4</td>
-                    <td>3.3</td>
-                    <td>8.2</td>
-                    <td>5.9</td>
-                    <td>0</td>
-                    <td>0.5</td>
-                    <td>120</td>
-                    <td><button class="delete-button" onclick="alert('두부조림이 삭제되었습니다.')">삭제</button></td>
-                    <!-- 삭제 버튼 생성 및 누를 시 문구 띄우기 -->
-                </tr>
-            </tbody>
-        </table>
+                {% endfor %}
+            </tbody>            
+        </table>        
     </div>
 </body>
 </html>
