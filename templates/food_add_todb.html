@@ -100,7 +100,7 @@
 <body>
     <div class="container">
         <div class="logo">
-            <a href="www.naver.com">FINE</a>
+            <a href="/">FINE</a>
             <!-- 로고 링크 설정 -->
         </div>
         <div class="content">
@@ -116,32 +116,36 @@
             </div>
             <div class="add-section">
                 <h2 class="add-title">음식 추가</h2>
-                <!-- 이름 음식 추가로 설정 -->
-                <form class="add-form">
+                <!-- 테이블 이름 음식 추가로 설정 -->
+                <form class="add-form" method="POST">
                     <!-- 텍스트 박스 위에 이름 부여 및 텍스트 박스 생성 및 글씨 띄우기 -->
+                     <!-- 텍스트 박스 타입, 이름, 서버로 전송할 이름까지 지정 -->
                     <label for="food-name">음식명</label>
-                    <input type="text" id="food-name" placeholder="음식명을 입력하세요">
-                    
-                    <label for="carbs">탄수화물 (g)</label>
-                    <input type="text" id="carbs" placeholder="예: 10">
-                    
-                    <label for="protein">단백질 (g)</label>
-                    <input type="text" id="protein" placeholder="예: 5">
-                    
-                    <label for="fat">지방 (g)</label>
-                    <input type="text" id="fat" placeholder="예: 3">
+                    <input type="text" id="food-name" name="food_name" placeholder="음식명을 입력하세요">
+
+                    <input type="hidden" id="food_code" name="food_code">
+                    <!-- 서버로 값은 전송하되 화면에는 안보이게 -->
                     
                     <label for="calories">칼로리 (kcal)</label>
-                    <input type="text" id="calories" placeholder="예: 50">
+                    <input type="text" id="calories" name="calories" placeholder="예: 50">
+
+                    <label for="carbs">탄수화물 (g)</label>
+                    <input type="text" id="carbs" name="carbs" placeholder="예: 10">
+                    
+                    <label for="protein">단백질 (g)</label>
+                    <input type="text" id="protein" name="protein" placeholder="예: 5">
+                    
+                    <label for="fat">지방 (g)</label>
+                    <input type="text" id="fat" name="fat" placeholder="예: 3">
                     
                     <label for="cholesterol">콜레스테롤 (mg)</label>
-                    <input type="text" id="cholesterol" placeholder="예: 0">
+                    <input type="text" id="cholesterol" name="cholesterol" placeholder="예: 0">
                     
                     <label for="fiber">식이섬유 (g)</label>
-                    <input type="text" id="fiber" placeholder="예: 0.1">
+                    <input type="text" id="fiber" name="fiber" placeholder="예: 0.1">
                     
                     <label for="sodium">나트륨 (mg)</label>
-                    <input type="text" id="sodium" placeholder="예: 5">
+                    <input type="text" id="sodium" name="sodium" placeholder="예: 5">
                     
                     <button type="submit" class="add-button">추가</button>
                     <!-- 추가 버튼 생성 -->
