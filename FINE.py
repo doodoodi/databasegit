@@ -22,6 +22,45 @@ def search_food_data(keyword):
     conn.close()
     return data
 
+# ---------------------------------------------------------------------------------------------------------------------------------
+# 테이블 초기화 함수
+def clear_table(table_name):
+    try:
+        conn = sqlite3.connect('food_db.db')
+        cursor = conn.cursor()
+        query = f"DELETE FROM {table_name}"  # 테이블의 모든 데이터 삭제
+        cursor.execute(query)
+        conn.commit()
+        conn.close()
+        return True
+    except Exception as e:
+        print(f"Error clearing table {table_name}: {e}")
+        return False
+
+# 아침 테이블 초기화
+@app.route('/reset_breakfast', methods=['POST'])
+def reset_breakfast():
+    if clear_table('breakfast'):
+        return jsonify({"message": "Breakfast table cleared successfully!"}), 200
+    else:
+        return jsonify({"error": "Failed to clear breakfast table."}), 500
+
+# 점심 테이블 초기화
+@app.route('/reset_lunch', methods=['POST'])
+def reset_lunch():
+    if clear_table('lunch'):
+        return jsonify({"message": "Lunch table cleared successfully!"}), 200
+    else:
+        return jsonify({"error": "Failed to clear lunch table."}), 500
+
+# 저녁 테이블 초기화
+@app.route('/reset_dinner', methods=['POST'])
+def reset_dinner():
+    if clear_table('dinner'):
+        return jsonify({"message": "Dinner table cleared successfully!"}), 200
+    else:
+        return jsonify({"error": "Failed to clear dinner table."}), 500
+
 #---------------------------------------------------------------------------------------------------------------------------------
 
 # breakfast 테이블에 데이터 추가
