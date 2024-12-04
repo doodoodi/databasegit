@@ -94,6 +94,18 @@
         table td .delete-button:hover {
             background-color: #d65a42; /* 삭제에 마우스 갖다대면 살짝 어두운 빨강색 */
         }
+        table td .update-button {
+            background-color: #63a7ac; /* 업데이트 버튼 배경 파랑색 */
+            color: white; /* 글자색 흰색 */
+            padding: 5px 10px; /* 버튼 내부 여백 설정 위, 아래 5px, 왼쪽, 오른쪽 10px */
+            font-size: 14px; /* 글자 크기 */
+            border: none; /* 테두리 제거 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            cursor: pointer; /* 버튼 위에 마우스를 올렸을 때 포인터 커서로 변경 */
+        }
+        table td .update-button:hover {
+            background-color: #436968; /* 업데이트에 마우스 갖다대면 살짝 어두운 파랑색 */
+        }
     </style>
 </head>
 <body>
@@ -131,27 +143,62 @@
             <tbody>
                 {% for item in food_data %}
                 <tr>
-                    <!-- 데이터셀 내용 -->
-                    <td>{{ item[0] }}</td>
-                    <td>{{ item[2] }}</td>
-                    <td>{{ item[3] }}</td>
-                    <td>{{ item[4] }}</td>
-                    <td>{{ item[5] }}</td>
-                    <td>{{ item[6] }}</td>
-                    <td>{{ item[7] }}</td>
-                    <td>{{ item[8] }}</td>
+                    <td contenteditable="true" class="editable" data-column="food_name">{{ item[0] }}</td>
+                    <td contenteditable="true" class="editable" data-column="calories">{{ item[2] }}</td>
+                    <td contenteditable="true" class="editable" data-column="carbs">{{ item[3] }}</td>
+                    <td contenteditable="true" class="editable" data-column="protein">{{ item[4] }}</td>
+                    <td contenteditable="true" class="editable" data-column="fat">{{ item[5] }}</td>
+                    <td contenteditable="true" class="editable" data-column="cholesterol">{{ item[6] }}</td>
+                    <td contenteditable="true" class="editable" data-column="fiber">{{ item[7] }}</td>
+                    <td contenteditable="true" class="editable" data-column="sodium">{{ item[8] }}</td>
                     <td>
                         <form method="POST">
-                            <input type="hidden" name="food_name" value="{{ item[0] }}">
-                            <input type="hidden" name="food_code" value="{{ item[1] }}">
-                            <button class="delete-button" type="submit">삭제</button>
+                            <input type="hidden" name="food_name_d" value="{{ item[0] }}">
+                            <input type="hidden" name="food_code_d" value="{{ item[1] }}">
+                            <button class="delete-button" id="delete-button" type="submit">삭제</button>
                             <!-- 삭제 버튼 생성 및 누를 시 문구 띄우기 -->
                         </form>
                     </td>
+                    <td>
+                        <form method="POST" action="/food_delete_fromdb">
+                            <input type="hidden" name="food_name" value="{{ item[0] }}">
+                            <input type="hidden" name="food_code" value="{{ item[1] }}">
+                            <input type="hidden" name="calories" value="{{ item[2] }}">
+                            <input type="hidden" name="carbs" value="{{ item[3] }}">
+                            <input type="hidden" name="protein" value="{{ item[4] }}">
+                            <input type="hidden" name="fat" value="{{ item[5] }}">
+                            <input type="hidden" name="cholesterol" value="{{ item[6] }}">
+                            <input type="hidden" name="fiber" value="{{ item[7] }}">
+                            <input type="hidden" name="sodium" value="{{ item[8] }}">
+                            <button class="update-button" type="submit">업데이트</button>
+                        </form>
+                    </td>           
                 </tr>
                 {% endfor %}
-            </tbody>            
-        </table>        
+            </tbody> 
+        </table>
+        <script>
+            // 셀을 더블클릭했을 때 내용을 수정 가능하게 만들기
+            const editableCells = document.querySelectorAll('.editable');
+        
+            editableCells.forEach(cell => {
+                cell.addEventListener('dblclick', function() {
+                    this.contentEditable = 'true'; // 셀을 편집 가능 상태로 만들기
+                    this.focus(); // 셀에 포커스를 맞추기
+                });
+        
+                // 편집이 끝난 후, 값을 자동으로 hidden input에 반영
+                cell.addEventListener('blur', function() {
+                    this.contentEditable = 'false'; // 편집이 끝나면 비활성화
+                    const column = this.getAttribute('data-column');
+                    const value = this.innerText; // 수정된 값
+                    const hiddenInput = this.closest('tr').querySelector(`input[name="${column}"]`);
+                    if (hiddenInput) {
+                        hiddenInput.value = value; // hidden input에 수정된 값 반영
+                    }
+                });
+            });
+        </script>
     </div>
 </body>
 </html>
