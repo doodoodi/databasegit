@@ -1,80 +1,89 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
+    <!-- 글자 인코딩 한국어 안깨지게 -->
     <title>FINE - 간편한 식단 관리</title>
+    <!-- 웹 이름 설정 -->
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            margin: 0;
-            display: flex;
+            font-family: Arial, sans-serif; /* 글자설정 */
+            background-color: #f9f9f9; /* 배경색 회색 */
+            color: #333; /* 검정색 */
+            margin: 0; /* 마진 제거 */
+            display: flex; /* flex 방식 사용 */
+            
+            /* 레이아웃 중앙배치 */
             justify-content: center; 
             align-items: center;
             height: 100vh;
             text-align: center;
         }
         .container {
-            max-width: 800px;
-            padding: 50px; 
-            border-radius: 20px; 
-            background: #ffffff;
-            box-shadow: 0px 9px 30px rgba(0, 0, 0, 0.1); 
+            max-width: 600px; /* 최대너비 설정 */
+            padding: 40px; /* 안쪽 여백 설정 */
+            border-radius: 10px; /* 모서리 좀 둥글게 */
+            background: #ffffff; /* 배경색 */
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* 박스 음영처리 살짝 */
         }
         .title {
-            font-size: 90px; 
-            font-weight: bold;
-            color: #2a9d8f;
-            margin-bottom: 30px; /* 여백 조정 */
+            font-size: 48px; /* 글자크기 */
+            font-weight: bold; /* 글자 굵게 */
+            color: #2a9d8f; /* 글자색 청록 */
+            margin-bottom: 10px; /* 글자 아래 여백 */
         }
         .subtitle {
-            font-size: 40px; 
-            color: #333333;
-            margin-bottom: 40px; /* 여백 조정 */
+            font-size: 24px; /* 글자크기 */
+            color: #333333; /* 글자색 어두운 색 */
+            margin-bottom: 20px; /* 글자 아래 여백 */
         }
         .description {
-            font-size: 30px; 
-            color: #555555;
-            margin-bottom: 60px; /* 여백을 추가 */
+            font-size: 18px; /* 글자크기 */
+            color: #555555; /* 글자색 회색느낌 */
+            margin-bottom: 30px; /* 설명 아래 여백 추가 */
         }
 
         /* 버튼 스타일 */
         .button-container {
-            display: flex;
-            gap: 90px; /* 버튼 간의 간격 */
-            justify-content: center;
+            display: flex; /* flex 방식 사용 */
+            gap: 40px; /* 버튼 간의 간격 */
+            justify-content: center; /* 중앙 배치 */
         }
         .button {
-            padding: 20px 40px; /* 버튼 크기 */
-            font-size: 30px; 
-            font-weight: bold;
-            color: white;
-            text-decoration: none;
-            border-radius: 12px; /* 버튼의 모서리를 약간 더 둥글게 */
-            transition: background-color 0.3s ease; /* 호버 효과 유지 */
-        }
-        .button:hover {
-            background-color: #21867a; 
+            padding: 10px 20px; /* 버튼 내부 여백 설정 위, 아래 10px, 왼쪽, 오른쪽 20px */
+            font-size: 16px; /* 글자 크기 */
+            font-weight: bold; /* 글자 굵게 */
+            color: white; /* 글자 색상 */
+            text-decoration: none; /* 링크에 밑줄 그어지는거 제거 */
+            border-radius: 5px; /* 둥근 모서리 */
         }
         .button-add {
-            background-color: #2a9d8f;
+            background-color: #2a9d8f; /* 추가 버튼 색상 */
         }
         .button-start {
-            background-color: #2a9d8f;
+            background-color: #2a9d8f; /* 시작 버튼 색상 */
         }
         .button-delete {
-            background-color: #2a9d8f;
+            background-color: #2a9d8f; /* 삭제 버튼 색상 */
         }
+
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="title">FINE</h1>
+        <!-- 메인 타이틀 -->
         <p class="subtitle">Fit, Intelligent, Nutrition, Eat</p>
+        <!-- 부제목 -->
         <p class="description">건강한 한 끼, 꾸준한 관리, 나만의 영양 설계</p>
+        <!-- 부제목 설명용 -->
+        
+        <!-- 링크는 나중에 수정예정 -->
         <div class="button-container">
-            <a href="/food_add_todb" class="button button-add">추가</a>
-            <a href="/siksa" class="button button-start">시작</a>
+            <a href="/food_add_todb" class="button button-add">추가</a> 
+
+            <!--식사 버튼 누르면 다음사이트로 이동하는 것 식사 table로 이동하게끔 수정-->
+            <a href="/siksa" class="button button-start">시작</a> 
+
             <a href="/food_delete_fromdb" class="button button-delete">삭제</a>
         </div>
     </div>

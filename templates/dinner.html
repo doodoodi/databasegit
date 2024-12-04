@@ -34,13 +34,13 @@
         }
         .search-bar {
             display: flex;
-            justify-content: center;
+            justify-content: center; /* 검색창을 가운데로 정렬 */
             align-items: center;
             gap: 10px;
             margin-bottom: 20px;
         }
         .search-bar input {
-            width: 400px;
+            width: 400px; /* 기존 크기에서 가로 크기를 더 늘림 */
             padding: 10px;
             font-size: 16px;
             border: 1px solid #ddd;
@@ -64,17 +64,15 @@
             margin-top: 20px;
         }
         table thead {
-            background-color: #2a9d8f;
-            color: white;
+            background-color: #f4f4f4;
+            color: black;
         }
         table th, table td {
             padding: 10px;
             text-align: center;
             border: 1px solid #ddd;
         }
-        td:last-child {
-            border-left: 1px solid #2a9d8f;
-        }
+
         .add-button {
             background-color: #2a9d8f;
             color: white;
@@ -86,22 +84,31 @@
         .add-button:hover {
             background-color: #238f7b;
         }
+
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- 로고 -->
         <div class="header">
             <a href="/siksa" class="logo">FINE</a>
         </div>
+
+        <!-- 검색 창 -->
         <div class="search-bar">
             <form method="POST" action="">
                 <input type="text" name="keyword" placeholder="음식 이름을 입력하세요">
+                <!-- <button type="submit">찾기</button> -->
                 <button type="button" onclick="handleSearch()">찾기</button>
             </form>
         </div>
+
+        <!-- 에러 메시지 -->
         {% if error_message %}
         <div class="error-message">{{ error_message }}</div>
         {% endif %}
+
+        <!-- 음식 리스트 테이블 -->
         <table>
             <thead>
                 <tr>
@@ -114,6 +121,7 @@
                     <th>콜레스테롤</th>
                     <th>식이섬유</th>
                     <th>나트륨</th>
+                    <th>기능</th>
                 </tr>
             </thead>
             <tbody>
@@ -128,6 +136,7 @@
                     <td>{{ item[6] }}</td>
                     <td>{{ item[7] }}</td>
                     <td>{{ item[8] }}</td>
+                    <!-- 추가 버튼에 showAlert() 함수 연결 -->
                     <td>
                         <button 
                             class="add-button" 
@@ -139,39 +148,45 @@
                 {% endfor %}
             </tbody>
         </table>
-        <script>
-                function addToDinner(rowData) {
-            fetch('/add-to-dinner', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(rowData),
-            })
-                .then(response => {
-                    if (response.ok) {
-                        alert("추가되었습니다!");
-                    } else {
-                        alert("이미 존재합니다!");
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
+        <script> /* 추가되었습니다 알람부분  */
+            function showAlert() {
+                alert("추가되었습니다!");
+            }
+        </script>
 
-        function handleAddButtonClick(rowElement) {
-            const rowData = Array.from(rowElement.children).slice(0, 9).map(td => td.innerText);
-            addToDinner({
-                name: rowData[0],
-                code: rowData[1],
-                calories: rowData[2],
-                carbs: rowData[3],
-                protein: rowData[4],
-                fat: rowData[5],
-                cholesterol: rowData[6],
-                fiber: rowData[7],
-                sodium: rowData[8],
-            });
-        }    
+        <script>
+            function addToDinner(rowData) {
+                fetch('/add-to-dinner', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(rowData),
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("추가되었습니다!");
+                        } else {
+                            alert("이미 존재합니다!");
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            function handleAddButtonClick(rowElement) {
+                const rowData = Array.from(rowElement.children).slice(0, 9).map(td => td.innerText);
+                addToDinner({
+                    name: rowData[0],
+                    code: rowData[1],
+                    calories: rowData[2],
+                    carbs: rowData[3],
+                    protein: rowData[4],
+                    fat: rowData[5],
+                    cholesterol: rowData[6],
+                    fiber: rowData[7],
+                    sodium: rowData[8],
+                });
+            }
         </script>
     </div>
 </body>
