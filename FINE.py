@@ -271,6 +271,7 @@ def add_to_dinner():
 @app.route('/food_add_todb', methods=['GET', 'POST'])
 def food_add_todb():
     if request.method == 'POST':
+        # 폼에서 전달된 데이터 가져오기
         food_name = request.form.get('food_name')
         food_code = request.form.get('food_code')
         calories = request.form.get('calories')
@@ -281,24 +282,30 @@ def food_add_todb():
         fiber = request.form.get('fiber')
         sodium = request.form.get('sodium')
 
+        # 데이터베이스에 저장
         conn = sqlite3.connect('food_db.db')
         cursor = conn.cursor()
         cursor.execute("""
-                       INSERT INTO food_data (음식명, 식품코드, 칼로리, 탄수화물, 단백질, 지방, 콜레스테롤, 식이섬유, 나트륨)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                       """, (food_name, food_code, calories, carbs, protein, fat, cholesterol, fiber, sodium))
-        conn.commit()
-        conn.close()
-        return redirect(url_for('food_add_todb'))
+                       INSERT INTO food_data (음식명, 칼로리, 탄수화물, 단백질, 지방, 콜레스테롤, 식이섬유, 나트륨)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                       """, (food_name, calories, carbs, protein, fat, cholesterol, fiber, sodium))
+        conn.commit()  # 변경사항 저장
+        conn.close()   # 닫기
+
+        return redirect(url_for('food_add_todb'))  # 삭제 후 페이지 리로드
+
+    # POST 요청이 아닌 경우에는 이 부분이 실행
     return render_template('food_add_todb.html')
 
-# --------------------------------------------------------------------------------------------------------------------------------
+
 
 # 제거 페이지
 @app.route('/food_delete_fromdb', methods=['GET', 'POST'])
 def food_delete_fromdb():
     error_message = None
-    food_data = get_food_data()
+    food_data = get_food_data()  # 기본 데이터 표시
+    
+    # 검색 및 검색 결과 없을 때 조건 처리
     if request.method == 'POST':
         keyword = request.form.get('keyword')
         if not keyword:
@@ -307,18 +314,20 @@ def food_delete_fromdb():
             food_data = search_food_data(keyword)
             if not food_data:
                 error_message = "검색 결과가 없습니다."
-
+        
+        # 삭제 요청 처리
         food_name = request.form.get('food_name')
         food_code = request.form.get('food_code')
-        if food_name:
+        if food_name:  # 삭제 동작 처리
             conn = sqlite3.connect('food_db.db')
             cursor = conn.cursor()
             cursor.execute("DELETE FROM food_data WHERE 음식명 = ? and 식품코드 = ?", (food_name, food_code))
             conn.commit()
             conn.close()
-            return redirect(url_for('food_delete_fromdb'))
+            return redirect(url_for('food_delete_fromdb'))  # 삭제 후 페이지 리로드
 
     return render_template('food_delete_fromdb.html', food_data=food_data, error_message=error_message)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
