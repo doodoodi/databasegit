@@ -316,14 +316,37 @@ def food_delete_fromdb():
                 error_message = "검색 결과가 없습니다."
         
         # 삭제 요청 처리
-        food_name = request.form.get('food_name')
-        food_code = request.form.get('food_code')
-        if food_name:  # 삭제 동작 처리
+        food_name_d = request.form.get('food_name_d')
+        food_code_d = request.form.get('food_code_d')
+        if food_name_d:  # 삭제 동작 처리
             conn = sqlite3.connect('food_db.db')
             cursor = conn.cursor()
-            cursor.execute("DELETE FROM food_data WHERE 음식명 = ? and 식품코드 = ?", (food_name, food_code))
+            cursor.execute("DELETE FROM food_data WHERE 음식명 = ? and 식품코드 = ?", (food_name_d, food_code_d))
             conn.commit()
             conn.close()
+            return redirect(url_for('food_delete_fromdb'))  # 삭제 후 페이지 리로드
+        
+        # 업데이트 요청 처리
+        food_name = request.form.get('food_name')
+        food_code = request.form.get('food_code')
+        calories = request.form.get('calories')
+        carbs = request.form.get('carbs')
+        protein = request.form.get('protein')
+        fat = request.form.get('fat')
+        cholesterol = request.form.get('cholesterol')
+        fiber = request.form.get('fiber')
+        sodium = request.form.get('sodium')
+        if food_name or calories or carbs or protein or fat or cholesterol or fiber or sodium:
+            conn = sqlite3.connect('food_db.db')
+            cursor = conn.cursor()
+            cursor.execute('''
+                            UPDATE food_data
+                            SET 음식명 = ?, 칼로리 = ?, 탄수화물 = ?, 단백질 = ?, 지방 = ?, 콜레스테롤 = ?, 식이섬유 = ?, 나트륨 = ?
+                            WHERE 식품코드 = ?
+                            ''', (food_name, calories, carbs, protein, fat, cholesterol, fiber, sodium, food_code))
+            conn.commit()
+            conn.close()           
+        
             return redirect(url_for('food_delete_fromdb'))  # 삭제 후 페이지 리로드
 
     return render_template('food_delete_fromdb.html', food_data=food_data, error_message=error_message)
