@@ -22,6 +22,42 @@ def search_food_data(keyword):
     conn.close()
     return data
 
+# 최대 칼로리를 기준으로 음식을 검색하는 함수
+@app.route('/max_calories_search', methods=['GET'])
+def max_calories_search():
+    max_calories = request.args.get('calories')  # 입력된 최대 칼로리 값 가져오기
+    if not max_calories:
+        return jsonify({"error": "No calorie value provided"}), 400
+
+    try:
+        # 데이터베이스 연결
+        conn = sqlite3.connect('food_db.db')
+        cursor = conn.cursor()
+
+        # 최대 칼로리 이하의 음식 검색
+        query = """
+            SELECT 음식명, 칼로리, 탄수화물, 단백질, 지방
+            FROM food_data
+            WHERE 칼로리 <= ?
+        """
+        cursor.execute(query, (max_calories,))
+        foods = cursor.fetchall()
+        conn.close()
+
+        # JSON으로 결과 반환
+        return jsonify([
+            {
+                "name": food[0],
+                "calories": food[1],
+                "carbs": food[2],
+                "protein": food[3],
+                "fat": food[4]
+            }
+            for food in foods
+        ])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 # ---------------------------------------------------------------------------------------------------------------------------------
 # 테이블 초기화 함수
 def clear_table(table_name):
@@ -60,6 +96,86 @@ def reset_dinner():
         return jsonify({"message": "Dinner table cleared successfully!"}), 200
     else:
         return jsonify({"error": "Failed to clear dinner table."}), 500
+
+#---------------------------------------------------------------------------------------------------------------------------------
+
+# 아침 메뉴 칼로리, 탄수화물, 단백질, 지방 총합 계산
+@app.route('/breakfast_totals', methods=['GET'])
+def get_breakfast_totals():
+    try:
+        conn = sqlite3.connect('food_db.db')
+        cursor = conn.cursor()
+        query = """
+        SELECT 
+            SUM(칼로리) as total_calories, 
+            SUM(탄수화물) as total_carbs, 
+            SUM(단백질) as total_protein, 
+            SUM(지방) as total_fat 
+        FROM breakfast
+        """
+        cursor.execute(query)
+        totals = cursor.fetchone()
+        conn.close()
+        return jsonify({
+            "total_calories": totals[0] or 0,
+            "total_carbs": totals[1] or 0,
+            "total_protein": totals[2] or 0,
+            "total_fat": totals[3] or 0
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# 점심 메뉴 칼로리, 탄수화물, 단백질, 지방 총합 계산
+@app.route('/lunch_totals', methods=['GET'])
+def get_lunch_totals():
+    try:
+        conn = sqlite3.connect('food_db.db')
+        cursor = conn.cursor()
+        query = """
+        SELECT 
+            SUM(칼로리) as total_calories, 
+            SUM(탄수화물) as total_carbs, 
+            SUM(단백질) as total_protein, 
+            SUM(지방) as total_fat 
+        FROM lunch
+        """
+        cursor.execute(query)
+        totals = cursor.fetchone()
+        conn.close()
+        return jsonify({
+            "total_calories": totals[0] or 0,
+            "total_carbs": totals[1] or 0,
+            "total_protein": totals[2] or 0,
+            "total_fat": totals[3] or 0
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+#저녁 메뉴 칼로리, 탄수화물, 단백질, 지방 총합 계산
+@app.route('/dinner_totals', methods=['GET'])
+def get_dinner_totals():
+    try:
+        conn = sqlite3.connect('food_db.db')
+        cursor = conn.cursor()
+        query = """
+        SELECT 
+            SUM(칼로리) as total_calories, 
+            SUM(탄수화물) as total_carbs, 
+            SUM(단백질) as total_protein, 
+            SUM(지방) as total_fat 
+        FROM dinner
+        """
+        cursor.execute(query)
+        totals = cursor.fetchone()
+        conn.close()
+        return jsonify({
+            "total_calories": totals[0] or 0,
+            "total_carbs": totals[1] or 0,
+            "total_protein": totals[2] or 0,
+            "total_fat": totals[3] or 0
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 #---------------------------------------------------------------------------------------------------------------------------------
 
@@ -112,6 +228,7 @@ def siksa():
     breakfast_data = get_table_data('breakfast')
     lunch_data = get_table_data('lunch')
     dinner_data = get_table_data('dinner')
+
     return render_template(
         'siksa.html',
         breakfast_data=breakfast_data,
