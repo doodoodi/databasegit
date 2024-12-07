@@ -117,7 +117,7 @@
             <div class="add-section">
                 <h2 class="add-title">음식 추가</h2>
                 <!-- 테이블 이름 음식 추가로 설정 -->
-                <form class="add-form" method="POST">
+                <form class="add-form" form id="add-form" method="POST">
                     <!-- 텍스트 박스 위에 이름 부여 및 텍스트 박스 생성 및 글씨 띄우기 -->
                      <!-- 텍스트 박스 타입, 이름, 서버로 전송할 이름까지 지정 -->
                     <label for="food-name">음식명</label>
@@ -147,7 +147,7 @@
                     <label for="sodium">나트륨 (mg)</label>
                     <input type="text" id="sodium" name="sodium" placeholder="예: 5">
                     
-                    <button type="submit" class="add-button">추가</button>
+                    <button type="submit" id="add-button" class="add-button">추가</button>
                     <!-- 추가 버튼 생성 -->
                 </form>
             </div>
@@ -177,6 +177,19 @@
                     alert('검색어를 입력하세요!'); // 검색어 미입력시 경고문
                 }
             }
+        });
+        document.getElementById('add-button').addEventListener('click', function (event) {
+            event.preventDefault(); // 기본 제출 동작 방지
+            // 입력 필드 가져오기
+            const foodName = document.getElementById('food-name').value.trim();
+            // 유효성 검사
+            if (!foodName) {
+                alert('음식명을 입력하세요!');
+                return; // 음식명이 비어있으면 폼 제출 중단
+            }
+            // 유효성 검사를 통과했을 때만 폼 제출
+            alert('음식이 추가되었습니다!');
+            document.getElementById('add-form').submit(); // 폼 제출
         });
     </script>
 </body>
