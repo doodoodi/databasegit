@@ -124,67 +124,6 @@
         <a href="/" class="logo">FINE</a>
     </div>
 
-    <!-- 검색 창 -->
-    <div class="search-bar">
-        <form onsubmit="return false;">
-            <input type="number" id="calorie-input" placeholder="최대 칼로리를 입력하세요" />
-            <button type="button" onclick="searchFoods()">찾기</button>
-        </form>
-    </div>
-
-    <!-- 검색 결과 리스트 (처음에는 숨김 상태) -->
-    <div id="search-results-container" style="display: none; max-height: 80px; overflow-y: auto; ">
-        <ul id="search-results" style="list-style: none; padding: 0; margin: 0;"></ul>
-    </div>
-
-
-    <script>
-        // 음식 검색 함수
-    function searchFoods() {
-        // 입력된 칼로리 값 가져오기, 문자열 값 -> 실수로 변경
-        maxCalories = parseFloat(document.getElementById('calorie-input').value);
-
-        // 입력이 없다면
-        if (isNaN(maxCalories)) {
-            alert('칼로리를 다시 입력하세요.');
-            return;
-        }
-        
-        //지정된 URL에 최대 칼로리를 쿼리 파라미터로 전달하여 데이터 가져오기
-        fetch(`/max_calories_search?calories=${maxCalories}`)
-            .then(response => response.json())
-            .then(data => {
-                const resultsContainer = document.getElementById('search-results-container');//검색결과 표시하는 컨테이너 선택
-                const resultsList = document.getElementById('search-results');// 검색 결과리스트를 표시할 요소 선택
-                // 기존 결과 초기화
-                resultsList.innerHTML = '';
-                if (data.length === 0) {
-                    // 검색 결과가 없을 경우
-                    resultsContainer.style.display = 'none';
-                    alert('검색 결과가 없습니다.');
-                    return;
-                }
-                // 검색 결과 표시
-                resultsContainer.style.display = 'block'; // 결과가 있으면 보이게하기
-                data.forEach(food => {
-                    const listItem = document.createElement('li');
-                    //음식이름 리스트 나열
-                    listItem.innerHTML = `
-                        <strong>${food.name}</strong><br> 
-                        칼로리: ${food.calories} kcal<br>
-                    `;
-                    //<list>결과출력
-                    resultsList.appendChild(listItem);
-                });
-            })
-        }
-    </script>
-
-    <!-- 에러 메시지 -->
-    {% if error_message %}
-    <div class="error-message">{{ error_message }}</div>
-    {% endif %}
-
     <!-- 버튼과 리스트 영역 -->
     <div class="container">
         <!-- 아침 섹션 -->
