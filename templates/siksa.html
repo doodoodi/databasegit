@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- -------------------------------------------------------------------------------------------------------------------------------- -->
+<!-- 스타일 부분 -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -118,19 +120,17 @@
 </head>
 
 <!-- -------------------------------------------------------------------------------------------------------------------------------- -->
-
-<!-- 이 부분에 업데이트로 최신화된 값을 아침, 점심, 저녁 섹션에 기존의 있는 값이 아닌 최신화된 값이 띄워지게 하고 싶어 -->
 <script>
-    // 데이터를 가져와 테이블을 업데이트하는 함수
+    // 데이터를 가져와 리스트를 최신화
     function fetchAndUpdateTable(mealType) {
-        fetch(`/${mealType}_data`, { cache: "no-store" })  // 캐시 방지 옵션 추가
+        fetch(`/${mealType}_data`)
             .then(response => response.json())
             .then(data => {
                 const listElement = document.querySelector(`.${mealType}-list`);
-                listElement.innerHTML = ''; // 기존 리스트 초기화
+                listElement.innerHTML = ''; //초기화
 
-                // 최신 데이터를 리스트에 추가
-                data.items.forEach(item => {
+                // 최신 데이터로 업데이트
+                data.forEach(item => {
                     listElement.innerHTML += `
                         <li>
                             <strong>${item[1]}. ${item[0]}</strong><br>
@@ -139,19 +139,12 @@
                         </li>`;
                 });
             })
-            .catch(error => {
-                console.error(`${mealType} 데이터를 가져오는 중 오류 발생:`, error);
-            });
+            .catch(error => console.error(`${mealType} 데이터 로드 오류:`, error));
     }
 
-    // 아침, 점심, 저녁 섹션 최신화
-    fetchAndUpdateTable('breakfast');
-    fetchAndUpdateTable('lunch');
-    fetchAndUpdateTable('dinner');
+    // 아침, 점심, 저녁 데이터 최신화
+    ['breakfast', 'lunch', 'dinner'].forEach(fetchAndUpdateTable);
 </script>
-
-
-<!-------------------------------------------------------------------------------------------------------------------------------->
 
 <body>
     <!-- 상단 로고 -->
@@ -161,11 +154,10 @@
 
     <!-- 버튼과 리스트 영역 -->
     <div class="container">
-
-    
-
+  
 <!-- -------------------------------------------------------------------------------------------------------------------------------- -->
-        <!-- 아침 섹션 -->
+       
+    <!-- 아침 섹션 -->
         <div class="section">
             <a href="/breakfast" class="button">아침</a>
             <div class="list-title">아침 메뉴</div>
@@ -249,6 +241,7 @@
     </div>
 
 <!-------------------------------------------------------------------------------------------------------------------------------->
+<!-- 아침, 점심, 저녁, 칼로리, 탄수화물, 단백질, 지방 총합 데이터 출력 -->
 
     <script>
         // 아침 총합 데이터
@@ -276,6 +269,9 @@
                     document.getElementById('lunch-total-protein').textContent = data.total_protein.toFixed(2);
                     document.getElementById('lunch-total-fat').textContent = data.total_fat.toFixed(2);
                 })
+                .catch(error => {
+                    console.error('점심 총합 데이터를 가져오는 중 오류 발생:', error);
+                });
         }
     
         // 저녁 총합 데이터
@@ -288,14 +284,17 @@
                     document.getElementById('dinner-total-protein').textContent = data.total_protein.toFixed(2);
                     document.getElementById('dinner-total-fat').textContent = data.total_fat.toFixed(2);
                 })
+                .catch(error => {
+                    console.error('저녁 총합 데이터를 가져오는 중 오류 발생:', error);
+                });
         }
     
-        // 호출
+        // 아침, 점심, 저녁 호출
         BreakfastTotals();
         LunchTotals();
         DinnerTotals();
-        
-        
+
+// ---------------------------------------------------------------------------------------------------------------------------------
 
         // 테이블 초기화
         function resetTable(mealType) {
@@ -311,8 +310,7 @@
                 }
             })
         }
-
-        
+  
 
     </script>
 
