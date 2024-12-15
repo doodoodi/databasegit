@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- -------------------------------------------------------------------------------------------------------------------------------- -->
+<!-- 스타일 부분 -->
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -80,6 +84,10 @@
         }
     </style>
 </head>
+
+<!-- -------------------------------------------------------------------------------------------------------------------------------- -->
+<!-- 구현 부분 -->
+
 <body>
     <div class="container">
         <!-- 로고 -->
@@ -141,38 +149,35 @@
     </div>
 
     <script>
-        // 검색 처리 함수
+        // 검색(칼로리 제한 + 음식명 검색)
         function handleSearch() {
             const calorieLimit = document.getElementById('calorieLimit').value; // 칼로리 제한 값
             const keyword = document.getElementById('keyword').value; // 음식명 키워드
-
+    
             // 서버로 검색 요청
             const queryParams = new URLSearchParams();
             if (calorieLimit) queryParams.append('calorieLimit', calorieLimit);
             if (keyword) queryParams.append('keyword', keyword);
-
+    
             fetch(`/search-foods?${queryParams.toString()}`)
-                .then(response => {
-                    if (!response.ok) throw new Error('검색에 실패했습니다.');
-                    return response.json();
-                })
+                .then(response => response.ok ? response.json() : Promise.reject('검색에 실패했습니다.'))
                 .then(data => updateTable(data))
                 .catch(error => {
                     console.error('Error:', error);
                     document.getElementById('errorMessage').textContent = "검색 중 오류가 발생했습니다.";
                 });
         }
-
-        // 테이블 업데이트
+    
+        // 테이블 업데이트(최신화)
         function updateTable(data) {
             const tableBody = document.getElementById('foodTableBody');
-            tableBody.innerHTML = ''; // 기존 데이터를 초기화
-
+            tableBody.innerHTML = ''; // 기존 데이터 초기화
+    
             if (data.length === 0) {
                 tableBody.innerHTML = '<tr><td colspan="10">검색 결과가 없습니다.</td></tr>';
                 return;
             }
-
+    
             // 새로운 데이터 추가
             data.forEach(item => {
                 const row = `
@@ -192,12 +197,12 @@
                 tableBody.insertAdjacentHTML('beforeend', row);
             });
         }
-
+    
         // 추가 버튼 처리
         function handleAddButtonClick(rowElement) {
             const rowData = Array.from(rowElement.children).slice(0, 9).map(td => td.innerText);
-
-            fetch('/add-to-dinner', { 
+    
+            fetch('/add-to-dinner', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -215,12 +220,11 @@
             .then(response => {
                 if (response.ok) {
                     alert("추가되었습니다!");
-                } else {
-                    alert("이미 존재합니다!");
                 }
             })
             .catch(error => console.error('Error:', error));
         }
     </script>
+    
 </body>
 </html>
