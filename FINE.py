@@ -272,15 +272,15 @@ def add_to_dinner():
 def food_add_todb():
     if request.method == 'POST':
         # 폼에서 전달된 데이터 가져오기
+        # 빈 데이터일 경우 0으로 대체
         food_name = request.form.get('food_name')
-        food_code = request.form.get('food_code')
-        calories = request.form.get('calories')
-        carbs = request.form.get('carbs')
-        protein = request.form.get('protein')
-        fat = request.form.get('fat')
-        cholesterol = request.form.get('cholesterol')
-        fiber = request.form.get('fiber')
-        sodium = request.form.get('sodium')
+        calories = float(request.form.get('calories') or 0)
+        carbs = float(request.form.get('carbs') or 0)
+        protein = float(request.form.get('protein') or 0)
+        fat = float(request.form.get('fat') or 0)
+        cholesterol = float(request.form.get('cholesterol') or 0)
+        fiber = float(request.form.get('fiber') or 0)
+        sodium = float(request.form.get('sodium') or 0)
 
         # 데이터베이스에 저장
         conn = sqlite3.connect('food_db.db')
