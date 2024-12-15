@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, make_response
 import sqlite3
 
 app = Flask(__name__)
@@ -72,6 +72,44 @@ def search_foods_api():
         return jsonify(data), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+#----------------------------------------------------------------------------------------------------------------------------------
+# 자동으로 데이터를 최신화하는 함수
+def auto_update_table(table_name):
+    try:
+        conn = sqlite3.connect('food_db.db')
+        cursor = conn.cursor()
+
+        # 최신 food_db 테이블과 비교하여 업데이트
+        query = f"""
+            UPDATE {table_name}
+            SET 칼로리 = (SELECT 칼로리 FROM food_data WHERE food_data.음식명 = {table_name}.음식명),
+                탄수화물 = (SELECT 탄수화물 FROM food_data WHERE food_data.음식명 = {table_name}.음식명),
+                단백질 = (SELECT 단백질 FROM food_data WHERE food_data.음식명 = {table_name}.음식명),
+                지방 = (SELECT 지방 FROM food_data WHERE food_data.음식명 = {table_name}.음식명),
+                콜레스테롤 = (SELECT 콜레스테롤 FROM food_data WHERE food_data.음식명 = {table_name}.음식명),
+                식이섬유 = (SELECT 식이섬유 FROM food_data WHERE food_data.음식명 = {table_name}.음식명),
+                나트륨 = (SELECT 나트륨 FROM food_data WHERE food_data.음식명 = {table_name}.음식명)
+            WHERE EXISTS (
+                SELECT 1 FROM food_data 
+                WHERE food_data.음식명 = {table_name}.음식명 
+                AND (
+                    food_data.칼로리 != {table_name}.칼로리 OR
+                    food_data.탄수화물 != {table_name}.탄수화물 OR
+                    food_data.단백질 != {table_name}.단백질 OR
+                    food_data.지방 != {table_name}.지방 OR
+                    food_data.콜레스테롤 != {table_name}.콜레스테롤 OR
+                    food_data.식이섬유 != {table_name}.식이섬유 OR
+                    food_data.나트륨 != {table_name}.나트륨
+                )
+            )
+        """
+        cursor.execute(query)
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Error updating table {table_name}: {e}")
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------
@@ -241,16 +279,24 @@ def home():
 # 식사 관리 페이지
 @app.route('/siksa')
 def siksa():
+    # 아침, 점심, 저녁 테이블을 최신화
+    auto_update_table('breakfast')
+    auto_update_table('lunch')
+    auto_update_table('dinner')
+
+    # 최신화된 데이터를 가져오기
     breakfast_data = get_table_data('breakfast')
     lunch_data = get_table_data('lunch')
     dinner_data = get_table_data('dinner')
 
+    # 최신화된 데이터를 템플릿에 전달
     return render_template(
         'siksa.html',
         breakfast_data=breakfast_data,
         lunch_data=lunch_data,
         dinner_data=dinner_data,
     )
+
 
 # 각 테이블 데이터를 가져오는 함수
 def get_table_data(table_name):

@@ -114,7 +114,42 @@
             color: #2a9d8f;
         }
     </style>
+    
 </head>
+
+<!-- -------------------------------------------------------------------------------------------------------------------------------- -->
+
+<!-- 이 부분에 업데이트로 최신화된 값을 아침, 점심, 저녁 섹션에 기존의 있는 값이 아닌 최신화된 값이 띄워지게 하고 싶어 -->
+<script>
+    // 데이터를 가져와 테이블을 업데이트하는 함수
+    function fetchAndUpdateTable(mealType) {
+        fetch(`/${mealType}_data`, { cache: "no-store" })  // 캐시 방지 옵션 추가
+            .then(response => response.json())
+            .then(data => {
+                const listElement = document.querySelector(`.${mealType}-list`);
+                listElement.innerHTML = ''; // 기존 리스트 초기화
+
+                // 최신 데이터를 리스트에 추가
+                data.items.forEach(item => {
+                    listElement.innerHTML += `
+                        <li>
+                            <strong>${item[1]}. ${item[0]}</strong><br>
+                            칼로리: ${item[2]} kcal, 탄수화물: ${item[3]} g, 단백질: ${item[4]} g, 지방: ${item[5]} g,
+                            콜레스테롤: ${item[6]} mg, 식이섬유: ${item[7]} g, 나트륨: ${item[8]} mg
+                        </li>`;
+                });
+            })
+            .catch(error => {
+                console.error(`${mealType} 데이터를 가져오는 중 오류 발생:`, error);
+            });
+    }
+
+    // 아침, 점심, 저녁 섹션 최신화
+    fetchAndUpdateTable('breakfast');
+    fetchAndUpdateTable('lunch');
+    fetchAndUpdateTable('dinner');
+</script>
+
 
 <!-------------------------------------------------------------------------------------------------------------------------------->
 
@@ -126,6 +161,10 @@
 
     <!-- 버튼과 리스트 영역 -->
     <div class="container">
+
+    
+
+<!-- -------------------------------------------------------------------------------------------------------------------------------- -->
         <!-- 아침 섹션 -->
         <div class="section">
             <a href="/breakfast" class="button">아침</a>
@@ -138,7 +177,7 @@
                 <p>탄수화물: <span id="breakfast-total-carbs">0</span> g</p>
                 <p>단백질: <span id="breakfast-total-protein">0</span> g</p>
                 <p>지방: <span id="breakfast-total-fat">0</span> g</p>
-            </div>
+            </div>  
 
             <ul class="food-list">
                 {% for item in breakfast_data %}
@@ -255,7 +294,9 @@
         BreakfastTotals();
         LunchTotals();
         DinnerTotals();
-    
+        
+        
+
         // 테이블 초기화
         function resetTable(mealType) {
             fetch(`/reset_${mealType}`, {
@@ -270,6 +311,8 @@
                 }
             })
         }
+
+        
 
     </script>
 
