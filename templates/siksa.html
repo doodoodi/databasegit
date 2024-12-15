@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- -------------------------------------------------------------------------------------------------------------------------------- -->
+<!-- 스타일 부분 -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,22 +27,52 @@
             color: #2a9d8f;
             text-decoration: none;
         }
+
+
+        .search-bar {
+            display: flex;
+            justify-content: center; 
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            width: 400px; 
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+        .search-bar button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #2a9d8f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-bar button:hover {
+            background-color: #238f7b;
+        }
+
+
         .container {
             display: flex;
             justify-content: space-between;
-            width: 90%;
-            margin-top: 20px;
+            width: 80%;
+            margin-top: 10px;
         }
         .section {
             text-align: center;
-            width: 30%;
+            width: 20%;
         }
         .button {
-            padding: 15px 30px;
+            padding: 20px 10px;
             font-size: 24px;
             font-weight: bold;
-            color: #2a9d8f;
-            background-color: #f9f9f9;
+            color: #f9f9f9;
+            background-color: #2a9d8f;
             border: none;
             border-radius: 10px;
             cursor: pointer;
@@ -53,12 +85,12 @@
             padding: 10px 20px;
             font-size: 16px;
             color: white;
-            background-color: #e63946; /* 빨간색 */
+            background-color: #e63946;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 10px;
-            margin-bottom: 20px; /*초기화 버튼을 밑에 메뉴 부분 띄어 간격을 만들었다*/
+            margin-top: 5px;
+            margin-bottom: 5px;
         }
         .list-title {
             font-size: 18px;
@@ -67,11 +99,9 @@
             margin-bottom: 10px;
         }
         .food-list {
-            
             list-style: none;
             padding: 0;
             margin: 0 auto;
-            
         }
         .food-list li {
             background-color: #f9f9f9;
@@ -79,10 +109,42 @@
             border-radius: 5px;
             margin-bottom: 10px;
             padding: 10px 15px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .totals {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #2a9d8f;
         }
     </style>
+    
 </head>
+
+<!-- -------------------------------------------------------------------------------------------------------------------------------- -->
+<script>
+    // 데이터를 가져와 리스트를 최신화
+    function fetchAndUpdateTable(mealType) {
+        fetch(`/${mealType}_data`)
+            .then(response => response.json())
+            .then(data => {
+                const listElement = document.querySelector(`.${mealType}-list`);
+                listElement.innerHTML = ''; //초기화
+
+                // 최신 데이터로 업데이트
+                data.forEach(item => {
+                    listElement.innerHTML += `
+                        <li>
+                            <strong>${item[1]}. ${item[0]}</strong><br>
+                            칼로리: ${item[2]} kcal, 탄수화물: ${item[3]} g, 단백질: ${item[4]} g, 지방: ${item[5]} g,
+                            콜레스테롤: ${item[6]} mg, 식이섬유: ${item[7]} g, 나트륨: ${item[8]} mg
+                        </li>`;
+                });
+            })
+            .catch(error => console.error(`${mealType} 데이터 로드 오류:`, error));
+    }
+    // 아침, 점심, 저녁 데이터 최신화
+    ['breakfast', 'lunch', 'dinner'].forEach(fetchAndUpdateTable);
+</script>
+
 <body>
     <!-- 상단 로고 -->
     <div class="header">
@@ -91,61 +153,150 @@
 
     <!-- 버튼과 리스트 영역 -->
     <div class="container">
-        <!-- 아침 섹션 -->
+  
+<!-- -------------------------------------------------------------------------------------------------------------------------------- -->
+       
+    <!-- 아침 섹션 -->
         <div class="section">
             <a href="/breakfast" class="button">아침</a>
             <div class="list-title">아침 메뉴</div>
             <button class="reset-button" onclick="resetTable('breakfast')">초기화</button>
+            <!-- 아침메뉴 총 칼로리, 탄수화물, 단백질, 지방 값-->
+            <div class="totals" id="breakfast-totals">
+                <p>아침 총합:</p>
+                <p>칼로리: <span id="breakfast-total-calories">0</span> kcal</p>
+                <p>탄수화물: <span id="breakfast-total-carbs">0</span> g</p>
+                <p>단백질: <span id="breakfast-total-protein">0</span> g</p>
+                <p>지방: <span id="breakfast-total-fat">0</span> g</p>
+            </div>  
+
             <ul class="food-list">
                 {% for item in breakfast_data %}
                 <li>
                     <strong>{{ item[1] }}. {{ item[0] }}</strong>
                     <br>
-                    칼로리: {{ item[3] }} kcal, 탄수화물: {{ item[4] }} g, 단백질: {{ item[5] }} g, 지방: {{ item[6] }} g,
-                    콜레스테롤: {{ item[7] }} mg, 식이섬유: {{ item[8] }} g, 나트륨: {{ item[9] }} mg
+                    칼로리: {{ item[2] }} kcal, 탄수화물: {{ item[3] }} g, 단백질: {{ item[4] }} g, 지방: {{ item[5] }} g,
+                    콜레스테롤: {{ item[6] }} mg, 식이섬유: {{ item[7] }} g, 나트륨: {{ item[8] }} mg
                 </li>
                 {% endfor %}
             </ul>
         </div>
+
+<!-------------------------------------------------------------------------------------------------------------------------------->
 
         <!-- 점심 섹션 -->
         <div class="section">
             <a href="/lunch" class="button">점심</a>
             <div class="list-title">점심 메뉴</div>
             <button class="reset-button" onclick="resetTable('lunch')">초기화</button>
+            <!-- 점심메뉴 총 칼로리, 탄수화물, 단백질, 지방 값-->
+            <div class="totals" id="lunch-totals">
+                <p>점심 총합:</p>
+                <p>칼로리: <span id="lunch-total-calories">0</span> kcal</p>
+                <p>탄수화물: <span id="lunch-total-carbs">0</span> g</p>
+                <p>단백질: <span id="lunch-total-protein">0</span> g</p>
+                <p>지방: <span id="lunch-total-fat">0</span> g</p>
+            </div>
+
             <ul class="food-list">
                 {% for item in lunch_data %}
                 <li>
                     <strong>{{ item[1] }}. {{ item[0] }}</strong>
                     <br>
-                    칼로리: {{ item[3] }} kcal, 탄수화물: {{ item[4] }} g, 단백질: {{ item[5] }} g, 지방: {{ item[6] }} g,
-                    콜레스테롤: {{ item[7] }} mg, 식이섬유: {{ item[8] }} g, 나트륨: {{ item[9] }} mg
+                    칼로리: {{ item[2] }} kcal, 탄수화물: {{ item[3] }} g, 단백질: {{ item[4] }} g, 지방: {{ item[5] }} g,
+                    콜레스테롤: {{ item[6] }} mg, 식이섬유: {{ item[7] }} g, 나트륨: {{ item[8] }} mg
                 </li>
                 {% endfor %}
             </ul>
         </div>
+
+<!-------------------------------------------------------------------------------------------------------------------------------->
 
         <!-- 저녁 섹션 -->
         <div class="section">
             <a href="/dinner" class="button">저녁</a>
             <div class="list-title">저녁 메뉴</div>
             <button class="reset-button" onclick="resetTable('dinner')">초기화</button>
+            <!-- 저녁메뉴 총 칼로리, 탄수화물, 단백질, 지방 값-->
+            <div class="totals" id="dinner-totals">
+                <p>저녁 총합:</p>
+                <p>칼로리: <span id="dinner-total-calories">0</span> kcal</p>
+                <p>탄수화물: <span id="dinner-total-carbs">0</span> g</p>
+                <p>단백질: <span id="dinner-total-protein">0</span> g</p>
+                <p>지방: <span id="dinner-total-fat">0</span> g</p>
+            </div>
+
             <ul class="food-list">
                 {% for item in dinner_data %}
                 <li>
                     <strong>{{ item[1] }}. {{ item[0] }}</strong>
                     <br>
-                    칼로리: {{ item[3] }} kcal, 탄수화물: {{ item[4] }} g, 단백질: {{ item[5] }} g, 지방: {{ item[6] }} g,
-                    콜레스테롤: {{ item[7] }} mg, 식이섬유: {{ item[8] }} g, 나트륨: {{ item[9] }} mg
+                    칼로리: {{ item[2] }} kcal, 탄수화물: {{ item[3] }} g, 단백질: {{ item[4] }} g, 지방: {{ item[5] }} g,
+                    콜레스테롤: {{ item[6] }} mg, 식이섬유: {{ item[7] }} g, 나트륨: {{ item[8] }} mg
                 </li>
                 {% endfor %}
             </ul>
         </div>
     </div>
 
+<!-------------------------------------------------------------------------------------------------------------------------------->
+<!-- 아침, 점심, 저녁, 칼로리, 탄수화물, 단백질, 지방 총합 데이터 출력 -->
+
     <script>
+        // 아침 총합 데이터
+        function BreakfastTotals() {
+            fetch('/breakfast_totals')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('breakfast-total-calories').textContent = data.total_calories.toFixed(2);
+                    document.getElementById('breakfast-total-carbs').textContent = data.total_carbs.toFixed(2);
+                    document.getElementById('breakfast-total-protein').textContent = data.total_protein.toFixed(2);
+                    document.getElementById('breakfast-total-fat').textContent = data.total_fat.toFixed(2);
+                })
+                .catch(error => {
+                    console.error('아침 총합 데이터를 가져오는 중 오류 발생:', error);
+                });
+        }
+    
+        // 점심 총합 데이터
+        function LunchTotals() {
+            fetch('/lunch_totals')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('lunch-total-calories').textContent = data.total_calories.toFixed(2);
+                    document.getElementById('lunch-total-carbs').textContent = data.total_carbs.toFixed(2);
+                    document.getElementById('lunch-total-protein').textContent = data.total_protein.toFixed(2);
+                    document.getElementById('lunch-total-fat').textContent = data.total_fat.toFixed(2);
+                })
+                .catch(error => {
+                    console.error('점심 총합 데이터를 가져오는 중 오류 발생:', error);
+                });
+        }
+    
+        // 저녁 총합 데이터
+        function DinnerTotals() {
+            fetch('/dinner_totals')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('dinner-total-calories').textContent = data.total_calories.toFixed(2);
+                    document.getElementById('dinner-total-carbs').textContent = data.total_carbs.toFixed(2);
+                    document.getElementById('dinner-total-protein').textContent = data.total_protein.toFixed(2);
+                    document.getElementById('dinner-total-fat').textContent = data.total_fat.toFixed(2);
+                })
+                .catch(error => {
+                    console.error('저녁 총합 데이터를 가져오는 중 오류 발생:', error);
+                });
+        }
+    
+        // 아침, 점심, 저녁 호출
+        BreakfastTotals();
+        LunchTotals();
+        DinnerTotals();
+
+// ---------------------------------------------------------------------------------------------------------------------------------
+
+        // 테이블 초기화
         function resetTable(mealType) {
-            // Fetch 요청으로 초기화 엔드포인트 호출
             fetch(`/reset_${mealType}`, {
                 method: 'POST'
             })
@@ -157,11 +308,10 @@
                     alert(`${mealType} 테이블 초기화에 실패했습니다.`);
                 }
             })
-            .catch(error => {
-                console.error('초기화 요청 중 오류 발생:', error);
-                alert('초기화 요청 중 오류가 발생했습니다.');
-            });
         }
-    </script>
+      </script>
+
+<!-------------------------------------------------------------------------------------------------------------------------------->
+
 </body>
 </html>
