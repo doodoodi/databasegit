@@ -515,6 +515,12 @@ def food_delete_fromdb():
             conn = sqlite3.connect('food_db.db')
             cursor = conn.cursor()
             cursor.execute("DELETE FROM food_data WHERE 음식명 = ? and 식품코드 = ?", (food_name_d, food_code_d))
+
+            # 추가한 부분: 모든 관련 테이블에서 삭제###
+            cursor.execute("DELETE FROM breakfast WHERE 음식명 = ?", (food_name_d,))
+            cursor.execute("DELETE FROM lunch WHERE 음식명 = ?", (food_name_d,))
+            cursor.execute("DELETE FROM dinner WHERE 음식명 = ?", (food_name_d,))
+            ########################################
             conn.commit()
             conn.close()
             return redirect(url_for('food_delete_fromdb'))  # 삭제 후 페이지 리로드
